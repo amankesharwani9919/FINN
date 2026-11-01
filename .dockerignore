@@ -1,0 +1,37 @@
+# Virtual environments
+.venv/
+env/
+venv/
+
+# Node modules
+node_modules/
+frontend/node_modules/
+
+# Environment files
+.env
+.env.*
+*.env
+
+# Python caches
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Git
+.git/
+
+# Database backups & legacy snapshots
+data/*.bak-*
+data/*.db.bak*
+*.db.bak*
+data/finn-before-reclassification.db
+
+# Large local primary source documents
+data/documents/
+
+# OS files
+.DS_Store
+Thumbs.db

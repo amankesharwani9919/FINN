@@ -1,0 +1,45 @@
+# Virtual environments
+.venv/
+env/
+venv/
+
+# Node / Frontend build dependencies
+node_modules/
+frontend/node_modules/
+
+# Environment files & secrets
+.env
+.env.*
+*.env
+
+# Python caches and bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.coverage
+htmlcov/
+
+# OS-specific files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Database backups & legacy snapshots (DO NOT commit backup copies)
+data/*.bak-*
+data/*.db.bak*
+*.db.bak*
+data/finn-before-reclassification.db
+
+# Large local primary source documents (PDFs)
+data/documents/
+
+# Test fixtures exported locally
+backend/tests/fixtures/real_announcements.json
+
+# Production database: track ONLY the verified data/finn.db snapshot
+!data/finn.db
