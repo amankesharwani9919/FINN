@@ -194,7 +194,7 @@ npm run --prefix frontend build
 python -c "import sqlite3; con = sqlite3.connect('data/finn.db'); print(con.execute('PRAGMA integrity_check').fetchall())"
 ```
 
-For the complete pre-deployment verification details, review [`report.md`](file:///home/aman-kesharwani/Desktop/ENAM_PROJ/finn-p0.2/report.md).
+For the complete pre-deployment verification details, review [report.md](report.md).
 
 ---
 

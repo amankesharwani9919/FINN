@@ -2,10 +2,10 @@
 
 **Audit Timestamp**: 2026-11-01T09:16:00+05:30  
 **Environment**: Linux (x86_64), Python 3.12.3, Node.js v24.11.1, SQLite 3.x  
-**Workspace**: `/home/aman-kesharwani/Desktop/ENAM_PROJ/finn-p0.2`  
+**Workspace**: `finn-p0.2`
 **Database File**: `data/finn.db` (SHA-256 verified, PRAGMA integrity `ok`)  
 **Latest Backup**: `data/finn.db.bak-20261101-083200`  
-**Audit Status**: **APPROVED — DEMO READY & PRODUCTION CERTIFIED**
+**Audit Status**: **APPROVED — LOCAL DEMO READY; PUBLIC DEPLOYMENT PENDING**
 
 ---
 
@@ -289,4 +289,4 @@ Open **`http://localhost:5173`** (Vite proxies all `/api` requests to port 8000)
 
 ## 10. Audit Conclusion
 
-The FINN system meets all institutional research requirements, evidence-integrity standards, and performance invariants. The application is completely stable, verified, and **demo-ready**. No further changes or deployments have been initiated.
+The FINN system meets all institutional research requirements, evidence-integrity standards, and performance invariants. The application is completely stable, verified, and **demo-ready**. No further changes or deployments have been initiated. For complete system architecture, technology stack, and production deployment guide, refer to [`README.md`](README.md).
