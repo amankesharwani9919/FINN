@@ -84,8 +84,9 @@ def filings_status(con) -> dict:
 
 
 # ------------------------------------------------------------------ helpers
-def _window(window: str | None, from_ts: str | None, to_ts: str | None):
+def _window(window: str | None, from_ts: str | None, to_ts: str | None, latest_ts: str | None = None):
     end = now_ist()
+    is_snapshot = False
     if from_ts:
         try:
             start = datetime.fromisoformat(from_ts).replace(tzinfo=IST)
@@ -93,12 +94,27 @@ def _window(window: str | None, from_ts: str | None, to_ts: str | None):
                 end = datetime.fromisoformat(to_ts).replace(tzinfo=IST) + timedelta(days=1)
         except ValueError:
             raise HTTPException(400, "from/to must be ISO dates, e.g. 2026-10-25")
-        return start, end, "Custom range"
+        return start, end, "Custom range", False
     hours = WINDOWS.get(window or "24h")
     if hours is None:
         raise HTTPException(400, f"window must be one of {list(WINDOWS)}")
-    return end - timedelta(hours=hours), end, {"24h": "Last 24 hours", "3d": "Last 3 days",
-                                               "7d": "Last 7 days", "30d": "Last 30 days"}[window or "24h"]
+    win_key = window or "24h"
+    base_label = {"24h": "Last 24 hours", "3d": "Last 3 days",
+                  "7d": "Last 7 days", "30d": "Last 30 days"}[win_key]
+    if latest_ts:
+        try:
+            latest_dt = datetime.fromisoformat(latest_ts)
+            if latest_dt.tzinfo is None:
+                latest_dt = latest_dt.replace(tzinfo=IST)
+            if (now_ist() - latest_dt) > timedelta(hours=FILINGS_FRESH_HOURS):
+                is_snapshot = True
+                end = latest_dt + timedelta(seconds=1)
+                start = latest_dt - timedelta(hours=hours)
+                label = f"{base_label} of snapshot"
+                return start, end, label, is_snapshot
+        except Exception:
+            pass
+    return end - timedelta(hours=hours), end, base_label, is_snapshot
 
 
 def build_items(con, start, end, symbol=None, price_thr=DEFAULT_PRICE_MOVE_PCT, vol_thr=DEFAULT_VOLUME_MULT):
@@ -183,18 +199,33 @@ def scoring():
 def brief(window: str | None = "24h", from_ts: str | None = None, to_ts: str | None = None,
           symbol: str | None = None, price_thr: float = Query(DEFAULT_PRICE_MOVE_PCT, ge=0.5, le=50),
           vol_thr: float = Query(DEFAULT_VOLUME_MULT, ge=1, le=20)):
-    start, end, label = _window(window, from_ts, to_ts)
     with session() as con:
+        latest_row = con.execute("SELECT MAX(ts) t FROM announcements").fetchone()
+        latest_ts = latest_row["t"] if latest_row and latest_row["t"] else None
+        start, end, label, is_snapshot = _window(window, from_ts, to_ts, latest_ts=latest_ts)
         items = build_items(con, start, end, symbol, price_thr, vol_thr)
+        st = status()
     counts = {t: sum(1 for i in items if i["tier"] == t) for t in ("act", "know", "skim")}
-    return {"window": {"label": label, "from": start.isoformat(), "to": end.isoformat()},
-            "counts": {**counts, "total": len(items)}, "items": items, "status": status()}
+    return {"window": {"label": label, "from": start.isoformat(), "to": end.isoformat(),
+                       "is_snapshot": is_snapshot, "snapshot_as_of": latest_ts},
+            "counts": {**counts, "total": len(items)}, "items": items, "status": st}
 
 
 @app.get("/api/portfolio")
 def portfolio(price_thr: float = DEFAULT_PRICE_MOVE_PCT, vol_thr: float = DEFAULT_VOLUME_MULT):
     end = now_ist()
     with session() as con:
+        latest_row = con.execute("SELECT MAX(ts) t FROM announcements").fetchone()
+        latest_ts = latest_row["t"] if latest_row and latest_row["t"] else None
+        if latest_ts:
+            try:
+                latest_dt = datetime.fromisoformat(latest_ts)
+                if latest_dt.tzinfo is None:
+                    latest_dt = latest_dt.replace(tzinfo=IST)
+                if (now_ist() - latest_dt) > timedelta(hours=FILINGS_FRESH_HOURS):
+                    end = latest_dt + timedelta(seconds=1)
+            except Exception:
+                pass
         week = build_items(con, end - timedelta(days=7), end, None, price_thr, vol_thr)
         px = prices_status(con)
         out = []

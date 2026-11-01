@@ -14,13 +14,13 @@
 This final audit certifies that **FINN (Financial Intelligence Neural Network)** has successfully completed all development and stabilization phases across **P1.1 (Push Engine & Materiality Scoring)**, **P1.2 (Results Cards & 8-Dimension Fundamental Research)**, **P1.3 (Promise vs Delivered Management Accountability Engine)**, and **P1.4 (Annual Report & Concall Transcript Intelligence)**.
 
 ### Core Audit Verdicts:
-1. **Backend Verification**: 233 of 233 unit and integration tests passing (`PYTHONPATH=backend pytest backend/tests/`).
+1. **Backend Verification**: 234 of 234 unit and integration tests passing (`PYTHONPATH=backend pytest backend/tests/`).
 2. **API Endpoint Health**: All 12 primary endpoints return HTTP 200 with complete schemas, deterministic calculations, and zero mock data in live feeds.
 3. **RELIANCE Research Dossier**: All 8 core research dimensions fully populated, anchored to 46 verified primary citations (6 Quarterly Results PDF, 3 Investor Presentation, 24 Annual Report FY26, 13 Concall Transcript Q2 FY26).
 4. **Promise vs Delivered Accountability**: 9 total commitments tracked; strict separation of 6 eligible commitments (0 evaluated, 2 in-progress, 4 unverifiable) and 3 non-promissory excluded items. Delivery score properly deferred with honest statistical caveat.
 5. **Database Integrity**: Zero row deletions, zero table shifts, and zero schema regressions across 8 persistent SQLite tables.
 6. **Frontend Production Build**: Zero TypeScript errors (`tsc --noEmit`), clean Vite bundling into `backend/static/` (264 KB JS, 44 KB CSS), and responsive desktop/mobile UI.
-7. **Zero-Hallucination Compliance**: 100% of disclosed metrics, quotes, and timeline milestones are traceable to official exchange filings or company IR portals with exact page numbers and verbatim excerpts.
+7. **Evidence-First Research Compliance**: 100% of disclosed metrics, quotes, and timeline milestones are traceable to official exchange filings or company IR portals with exact page numbers and verbatim excerpts.
 
 ---
 
@@ -28,8 +28,8 @@ This final audit certifies that **FINN (Financial Intelligence Neural Network)**
 
 ### 2.1 Pytest Suite Execution
 - **Command**: `PYTHONPATH=backend .venv/bin/pytest backend/tests/ -v`
-- **Total Tests Collected**: 233
-- **Passed**: 233 (100%)
+- **Total Tests Collected**: 234
+- **Passed**: 234 (100%)
 - **Failed**: 0
 - **Duration**: 8.27 seconds
 
@@ -37,7 +37,7 @@ This final audit certifies that **FINN (Financial Intelligence Neural Network)**
 | Test Suite Module | Tests | Status | Scope Covered |
 | :--- | :---: | :---: | :--- |
 | `backend/tests/legacy/test_classify_v1.py` | 21 | PASSED | Legacy classification backwards compatibility |
-| `backend/tests/test_api.py` | 12 | PASSED | Brief, Portfolio, Status, Scoring, Static serving |
+| `backend/tests/test_api.py` | 13 | PASSED | Brief, Portfolio, Status, Scoring, Static serving, Snapshot filtering |
 | `backend/tests/test_classify.py` | 52 | PASSED | 15-category deterministic filing classification & confidence |
 | `backend/tests/test_commitments_api.py` | 5 | PASSED | Commitments REST API endpoints & summary contracts |
 | `backend/tests/test_commitments_eval.py` | 29 | PASSED | Status evaluation engine (Achieved, In-Progress, Unverifiable) |
@@ -70,7 +70,7 @@ Every major API route was audited against live data in `data/finn.db`:
 | `GET` | `/api/results/filing/70d0cbf0b448b8ca` | `200 OK` | 6.0 KB | Complete Regulation 33 quarterly results card with QoQ & YoY comparisons. |
 | `GET` | `/api/research/search?q=REL` | `200 OK` | 291 B | Autocomplete search returning RELIANCE with `has_research: true`. |
 | `GET` | `/api/research/RELIANCE` | `200 OK` | 62.2 KB | Complete 8-dimension fundamental research dossier with 46 citations. |
-| `GET` | `/api/research/TCS` | `200 OK` | 279 B | Honest `UNAVAILABLE` response with zero-hallucination policy explanation. |
+| `GET` | `/api/research/TCS` | `200 OK` | 279 B | Honest `UNAVAILABLE` response with evidence-first research and explicit uncertainty explanation. |
 | `GET` | `/api/research/UNKNOWN` | `404 Not Found`| 77 B | Standard 404 for untracked ticker with clear error details. |
 | `GET` | `/api/commitments/RELIANCE` | `200 OK` | 24.6 KB | 9 audited commitments with promise vs actual evidence citations. |
 | `GET` | `/api/commitments/RELIANCE/summary` | `200 OK` | 1.7 KB | Scorecard summary (0 of 6 eligible evaluated, score deferred with caveat). |
@@ -178,8 +178,8 @@ All evidence is derived strictly from official filings stored locally:
 - **Output Directory**: `backend/static/`
 - **Bundle Metrics**:
   - `index.html`: 0.85 kB (gzip: 0.43 kB)
-  - CSS (`index-4d2Ohp66.css`): 44.26 kB (gzip: 8.41 kB)
-  - JS (`index-D-QpxRUb.js`): 264.28 kB (gzip: 70.99 kB)
+  - CSS (`index-DHHMCWEG.css`): 46.35 kB (gzip: 8.77 kB)
+  - JS (`index-CcdaYes_.js`): 269.94 kB (gzip: 72.21 kB)
   - Build Duration: 632 ms
 - **Errors / Warnings**: **0 errors, 0 warnings**.
 
@@ -211,7 +211,7 @@ All evidence is derived strictly from official filings stored locally:
 ### 6.2 Edge State Handling
 - **Loading States**: Animated pulse spinners rendered while fetching brief, portfolio, or research dossiers.
 - **Honest Unavailable States**:
-  - Requesting an ingested company with no synthesized dossier (e.g., `TCS`) renders an honest "Research Dossier Unavailable" view detailing the Zero-Hallucination Policy and offering a one-click button to view RELIANCE.
+  - Requesting an ingested company with no synthesized dossier (e.g., `TCS`) renders an honest "Research Dossier Unavailable" view detailing evidence-first research with explicit uncertainty and offering a one-click button to view RELIANCE.
   - Non-existent tickers return HTTP 404 with a user-friendly error container and "Retry" option.
 - **Data Authenticity**: Real exchange feeds report `EOD` for prices and `DELAYED` for announcements. Zero synthetic mock data is presented as real institutional information.
 

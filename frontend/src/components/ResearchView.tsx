@@ -332,7 +332,7 @@ export function ResearchView({ onOpenCompany, initialSymbol = "RELIANCE" }: Rese
             </p>
 
             <div className="mt-5 mx-auto max-w-lg rounded border border-rule bg-paper/60 p-4 text-left">
-              <p className="text-xs font-semibold text-ink">Zero-Hallucination Policy:</p>
+              <p className="text-xs font-semibold text-ink">Evidence-First Research with Explicit Uncertainty:</p>
               <p className="mt-1 text-[12px] text-mute">
                 FINN strictly produces financial research grounded in primary official disclosures. To synthesize this company's dossier:
               </p>

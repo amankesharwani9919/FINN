@@ -6,6 +6,7 @@ export function Ribbon({ items, from, to }: { items: Item[]; from: string; to: s
   const a = new Date(from).getTime(), b = new Date(to).getTime(), span = Math.max(1, b - a);
   const fmt = (t: number) => new Date(t).toLocaleDateString("en-IN", { timeZone: "Asia/Kolkata", day: "numeric", month: "short" });
   const ticks = [...items].sort((x, y) => ({ skim: 0, know: 1, act: 2 }[x.tier] - { skim: 0, know: 1, act: 2 }[y.tier]));
+  const isRecent = Math.abs(Date.now() - b) < 2 * 36e5;
   return (
     <div aria-label={`${items.length} filings over the selected window`} role="img">
       <div className="relative h-9 border-b border-ink/70">
@@ -19,7 +20,10 @@ export function Ribbon({ items, from, to }: { items: Item[]; from: string; to: s
           );
         })}
       </div>
-      <div className="mt-1 flex justify-between text-[11.5px] text-mute"><span>{fmt(a)}</span><span>Now</span></div>
+      <div className="mt-1 flex justify-between text-[11.5px] text-mute">
+        <span>{fmt(a)}</span>
+        <span>{isRecent ? "Now" : fmt(b)}</span>
+      </div>
     </div>
   );
 }

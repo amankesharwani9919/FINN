@@ -25,7 +25,16 @@ export default function App() {
   const [status, setStatus] = useState<Status | null>(null);
   const [sheet, setSheet] = useState(false);
 
-  useEffect(() => { api.status().then(setStatus).catch(() => {}); }, []);
+  useEffect(() => {
+    api.status().then((s) => {
+      setStatus(s);
+      if (s.announcements.as_of) {
+        const toD = s.announcements.as_of.slice(0, 10);
+        const fromD = new Date(new Date(toD + "T00:00:00Z").getTime() - 7 * 864e5).toISOString().slice(0, 10);
+        setRange({ from: fromD, to: toD });
+      }
+    }).catch(() => {});
+  }, []);
 
   const loadBrief = useCallback(() => {
     const qs = new URLSearchParams();

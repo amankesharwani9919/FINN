@@ -1,4 +1,5 @@
 import pytest
+from datetime import timedelta
 from fastapi.testclient import TestClient
 from finn import api
 from finn.db import session
@@ -80,6 +81,39 @@ def test_portfolio_uses_real_status_label():
     p = c.get("/api/portfolio").json()
     tcs = next(h for h in p["holdings"] if h["symbol"] == "TCS")
     assert tcs["price_status"] == "EOD" and tcs["stats"]["close"] == 101
+
+
+def test_brief_snapshot_relative_date_filtering(monkeypatch):
+    seed_basic()
+    # Simulate wall-clock time being 14 days after the latest filing in the database
+    future_now = NOW + timedelta(days=14)
+    monkeypatch.setattr(api, "now_ist", lambda: future_now)
+
+    # 1. 24h filter is relative to newest snapshot filing (not current wall-clock) and returns all 4 filings
+    b24 = c.get("/api/brief?window=24h").json()
+    assert b24["window"]["is_snapshot"] is True
+    assert "snapshot" in b24["window"]["label"].lower()
+    assert b24["counts"]["total"] == 4
+
+    # 2. 7d window also returns filings relative to the snapshot
+    b7 = c.get("/api/brief?window=7d").json()
+    assert b7["window"]["is_snapshot"] is True
+    assert b7["counts"]["total"] == 4
+
+    # 3. Snapshot metadata is exposed accurately
+    assert b24["window"]["snapshot_as_of"] is not None
+    assert b24["status"]["announcements"]["as_of"] is not None
+    assert b24["status"]["prices"]["as_of"] is not None
+
+    # 4. Custom range ignores snapshot anchoring and respects user-provided dates
+    b_custom = c.get("/api/brief?from_ts=2026-10-01&to_ts=2026-10-31").json()
+    assert b_custom["window"]["is_snapshot"] is False
+    assert b_custom["window"]["label"] == "Custom range"
+
+    # 5. Portfolio 7d filings count is also snapshot-aware
+    p = c.get("/api/portfolio").json()
+    tcs = next(h for h in p["holdings"] if h["symbol"] == "TCS")
+    assert sum(tcs["filings_7d"].values()) == 2
 
 
 def test_results_api_endpoints():

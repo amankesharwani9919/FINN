@@ -26,7 +26,7 @@ export interface Item {
   result_id?: string | null;
 }
 export interface Brief {
-  window: { label: string; from: string; to: string };
+  window: { label: string; from: string; to: string; is_snapshot?: boolean; snapshot_as_of?: string | null };
   counts: { act: number; know: number; skim: number; total: number };
   items: Item[]; status: Status;
 }

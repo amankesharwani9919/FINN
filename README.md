@@ -5,15 +5,17 @@
 [![React 18](https://img.shields.io/badge/React-18.3-61dafb.svg)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.5-3178c6.svg)](https://www.typescriptlang.org/)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
-[![Zero Hallucination](https://img.shields.io/badge/Zero--Hallucination-100%25%20Verified-brightgreen.svg)]()
+[![Evidence-First](https://img.shields.io/badge/Evidence--First-100%25%20Verified-brightgreen.svg)]()
 
-> **FINN** is an institutional-grade, evidence-grounded financial intelligence platform for Indian equities (NSE/BSE). Built on a strict **zero-hallucination policy**, FINN anchors every number, management quotation, and forward commitment to official primary disclosures (exchange filings, audited annual reports, and verified earnings call transcripts).
+> **FINN** is an institutional-grade, evidence-grounded financial intelligence platform for Indian equities (NSE/BSE). Built on a strict principle of **evidence-first research with explicit uncertainty**, FINN anchors every number, management quotation, and forward commitment to official primary disclosures (exchange filings, audited annual reports, and verified earnings call transcripts).
+
+**Repository**: [https://github.com/amankesharwani9919/FINN](https://github.com/amankesharwani9919/FINN)
 
 ---
 
 ## Table of Contents
 1. [Core Features & Architecture](#core-features--architecture)
-2. [Primary Source Integrity & Zero-Hallucination Policy](#primary-source-integrity--zero-hallucination-policy)
+2. [Primary Source Integrity & Evidence-First Research](#primary-source-integrity--evidence-first-research-with-explicit-uncertainty)
 3. [The Four Engine Milestones](#the-four-engine-milestones)
 4. [Technology Stack](#technology-stack)
 5. [Quick Start & Local Setup](#quick-start--local-setup)
@@ -34,7 +36,7 @@ FINN operates across two foundational paradigms:
 - **Materiality Scoring Matrix**: Transparent formula combining base event gravity, portfolio weight, and intraday market reaction:
   $$\text{Score} = \text{Base Points} + \text{Weight Points} + \text{Market Reaction Points} - \text{Confidence Penalty}$$
 - **Scoring Gates**: High-impact priority gates prevent minor routine items from ever appearing in *Needs you*.
-- **Portfolio Tracking**: Real-time tracking of institutional portfolio holdings with 20-day volume multiples and EOD price moves.
+- **Portfolio Tracking**: End-of-day (EOD) tracking of institutional portfolio holdings with 20-day volume multiples and session price moves.
 
 ### 2. Pull Engine: On-Demand Fundamental Research & Audit (P1.2, P1.3, P1.4)
 - **Quarterly Results Card (Regulation 33)**: Consolidated vs. Standalone statement comparison, QoQ & YoY metrics, EBITDA derivations, and statutory reconciliation notes.
@@ -50,9 +52,15 @@ FINN operates across two foundational paradigms:
 - **Promise vs. Delivered Engine (P1.3)**: Multi-quarter accountability tracking comparing initial management commitments with subsequent actual disclosures, governed by strict chronology and eligibility audits.
 - **Annual Report & Concall Intelligence (P1.4)**: Deterministic extraction from audited Annual Reports and Earnings Call Transcripts, complete with speaker attribution, verbatim quotes, confidence scores, and management divergence flags.
 
+### 3. Data Scope & Coverage Invariants
+- **17-Company Institutional Portfolio**: Active monitoring across 17 symbols (`HDFCBANK`, `RELIANCE`, `TCS`, `BAJFINANCE`, `INFY`, `ITC`, `LT`, `MARUTI`, `SUNPHARMA`, `TITAN`, `DIXON`, `ETERNAL`, `PERSISTENT`, `POLYCAB`, `TRENT`, `KPITTECH`, `CDSL`) with official exchange announcements and EOD market quotes.
+- **Deep-Dive Fundamental Research (RELIANCE)**: The comprehensive 8-Dimension research dossier, interactive citation inspector, and Promise vs. Delivered evaluation are populated for **RELIANCE** as the flagship demonstration (anchored to 46 verified primary citations). Other portfolio companies display transparent `UNAVAILABLE` handling under FINN's evidence-first research with explicit uncertainty principles until their offline ingestion pipelines are run.
+- **Historical Snapshot & Snapshot-Aware Filtering**: Preloaded frozen data snapshot (NSE Q2 FY27). Announcements are as of October 31, 2026 (22:16 IST) and EOD prices are as of October 30, 2026 (Friday close). Brief filters (`24h`, `3d`, `7d`, `30d`) are snapshot-aware and anchored to the latest available snapshot filing rather than wall-clock time.
+- **Promise vs. Delivered Limitations**: 9 commitments are audited for RELIANCE. 3 non-promissory items (strategic intentions, historical milestones) are excluded, 2 are active in-progress multi-year targets, and 4 are unverifiable without subsequent primary disclosures. The delivery score is honestly reported as `N/A` (deferred with an explicit statistical caveat) rather than presenting a fabricated score.
+
 ---
 
-## Primary Source Integrity & Zero-Hallucination Policy
+## Primary Source Integrity & Evidence-First Research with Explicit Uncertainty
 
 FINN rejects synthetic generation, ungrounded web scraping, and third-party opinions. Every metric and insight is strictly traceable to official corporate disclosures:
 
@@ -77,7 +85,7 @@ flowchart LR
 ```
 
 ### Milestone Summary
-- **P1.1**: Real-time exchange filing classification, materiality priority gates, and portfolio monitoring.
+- **P1.1**: Deterministic exchange filing classification, materiality priority gates, and portfolio monitoring.
 - **P1.2**: Automated extraction of Regulation 33 results and synthesis of the 8-Dimension research dossier.
 - **P1.3**: Commitment tracking engine with chronological promise-actual matching and delivery scorecard.
 - **P1.4**: Ingestion of official Integrated Annual Reports and Concall Transcripts with interactive citation inspection and management review warnings.
@@ -91,7 +99,7 @@ flowchart LR
   - **FastAPI**: Asynchronous high-performance REST API
   - **SQLite**: Zero-maintenance embedded database with non-destructive migrations
   - **pdftotext (`poppler-utils`)**: Local, deterministic `-layout` text extraction (₹0 budget, no paid APIs)
-  - **Pytest**: 233 comprehensive unit and integration tests
+  - **Pytest**: 234 comprehensive unit and integration tests
 - **Frontend**:
   - **React 18** & **TypeScript 5.5**
   - **Vite 6**: Fast production bundler and dev server
@@ -112,8 +120,8 @@ flowchart LR
 ### 1. Clone & Set Up Python Environment
 ```bash
 # Clone the repository
-git clone https://github.com/your-username/finn-p0.2.git
-cd finn-p0.2
+git clone https://github.com/amankesharwani9919/FINN.git
+cd FINN
 
 # Create and activate virtual environment
 python3.12 -m venv .venv
@@ -184,7 +192,7 @@ npm run dev
 FINN includes a comprehensive, deterministic test suite:
 
 ```bash
-# Run the complete backend test suite (233 tests)
+# Run the complete backend test suite (234 tests)
 PYTHONPATH=backend pytest backend/tests/ -v
 
 # Run frontend TypeScript type-checking and bundling
@@ -248,6 +256,17 @@ Because Indian exchange portals (NSE) actively block datacenter and cloud IP add
 - **Ephemeral Filesystem**: Free platforms do not provide persistent disk volumes. Any runtime file modifications or background ingestion attempts in the cloud will be erased upon container restart. All updates must follow the local ingest $\rightarrow$ redeploy snapshot workflow.
 - **Memory Ceiling**: The FastAPI + React bundle runs within ~90 MB to 120 MB RAM, well inside the standard 512 MB free tier quota.
 
+### 6. Render Deployment Walkthrough
+To deploy the application to Render ($0 free tier):
+1. Push to your GitHub repository: `https://github.com/amankesharwani9919/FINN`.
+2. In the [Render Dashboard](https://dashboard.render.com/), click **New +** $\rightarrow$ **Web Service**.
+3. Connect your repository: `https://github.com/amankesharwani9919/FINN`.
+4. Configure service settings:
+   - **Environment / Runtime**: `Docker` (Render automatically detects the root `Dockerfile`).
+   - **Instance Type**: `Free`.
+   - **Health Check Path**: `/api/status`.
+5. Click **Deploy Web Service**. Render builds the multi-stage image (compiling the React frontend and bundling `data/finn.db`) and starts the service.
+
 ---
 
 ## Project Layout
@@ -267,7 +286,7 @@ finn-p0.2/
 │   │   ├── db.py                     # SQLite database session & migrations
 │   │   └── models.py                 # Pydantic data schemas
 │   ├── static/                       # Production frontend build assets
-│   └── tests/                        # 233 unit & integration test files
+│   └── tests/                        # 234 unit & integration test files
 ├── frontend/
 │   ├── src/
 │   │   ├── components/

@@ -85,6 +85,8 @@ export function BriefView(p: Props) {
         </div>
       )}
 
+      {p.brief && <SnapshotBanner brief={p.brief} win={p.win} />}
+
       {p.error ? (
         <div className="py-10">
           <p className="font-semibold">Couldn't load the brief.</p>
@@ -185,6 +187,72 @@ export function BriefView(p: Props) {
         </div>
       )}
     </div>
+  );
+}
+
+function formatSnapshotDate(ts: string | null | undefined): string {
+  if (!ts) return "Unavailable";
+  try {
+    return (
+      new Date(ts).toLocaleString("en-IN", {
+        timeZone: "Asia/Kolkata",
+        day: "numeric",
+        month: "short",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: false,
+      }) + " IST"
+    );
+  } catch {
+    return ts;
+  }
+}
+
+function formatPriceEodDate(dateStr: string | null | undefined): string {
+  if (!dateStr) return "Unavailable";
+  try {
+    const d = new Date(dateStr.includes("T") ? dateStr : `${dateStr}T00:00:00+05:30`);
+    return (
+      d.toLocaleDateString("en-IN", {
+        timeZone: "Asia/Kolkata",
+        weekday: "short",
+        day: "numeric",
+        month: "short",
+        year: "numeric",
+      }) + " (EOD close)"
+    );
+  } catch {
+    return `${dateStr} (EOD close)`;
+  }
+}
+
+function SnapshotBanner({ brief, win }: { brief: Brief; win: Win }) {
+  const annAsOf = brief.status?.announcements?.as_of;
+  const priceAsOf = brief.status?.prices?.as_of;
+
+  return (
+    <aside aria-label="Database snapshot provenance" className="mt-3 mb-2 rounded border border-rule bg-raised/70 px-3.5 py-2.5 text-xs text-mute">
+      <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1.5">
+        <div className="flex items-center gap-1.5 font-semibold text-ink">
+          <span className="inline-block h-2 w-2 rounded-full bg-accent" aria-hidden="true" />
+          <span>Data as of:</span>
+        </div>
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-ink/90 font-medium">
+          <span>
+            📰 <b>Filings:</b> {formatSnapshotDate(annAsOf)}
+          </span>
+          <span className="hidden sm:inline text-faint" aria-hidden="true">•</span>
+          <span>
+            📈 <b>Prices:</b> {formatPriceEodDate(priceAsOf)}
+          </span>
+        </div>
+      </div>
+      <p className="mt-1.5 text-[11.5px] leading-relaxed text-faint">
+        Hosted deployment uses a preloaded historical data snapshot (NSE Q2 FY27) and is not continuously refreshed.
+        Time windows ({win === "custom" ? "custom range" : win}) are relative to the newest available filing.
+      </p>
+    </aside>
   );
 }
 
